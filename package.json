@@ -1,0 +1,31 @@
+{
+  "name": "angularjs",
+  "license": "MIT",
+  "branchVersion": "^1.5.0",
+  "branchPattern": "1.5.*",
+  "scripts": {
+    "start": "npm run lite",
+    "lite": "lite-server"
+  },
+  "engines": {
+    "node": "<5",
+    "npm": "~2.5"
+  },
+  "engineStrict": true,  
+  "devDependencies": {
+    "angular-benchpress": "0.x.x",
+    "benchmark": "1.x.x"   
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/angular/angular.js/blob/master/LICENSE"
+    }
+  ],
+  "dependencies": {},
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  }
+}
