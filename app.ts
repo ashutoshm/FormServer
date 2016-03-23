@@ -1,34 +1,25 @@
 /// <reference path="angular-1.4.d.ts" />
+/// <reference path="models.ts" />
 
 module Directives {
-    export class User {
-        name: string;
-        gravatar_id: string;
-        repos_url: string;
-        
-        constructor(n: string, gid: string, url: string) {
-            this.name = n;
-            this.gravatar_id = gid;
-            this.repos_url = url;
+    export class RepoDisplay implements angular.IDirective {
+        public restrict: string = "E";
+        public templateUrl:  string = "repoDisplay.html"
+        public replace: boolean = true;
+        public scope = {
+            repos: "=",
+            repoSortOrder: "="
         }
     }
     
-    export class Repo {
-        name: string;
-        stargazers_count: number;
-        language: string;
+    export class UserDetails implements angular.IDirective {
+        public restrict = "E";
+        public templateUrl = "userdetails.html";
+        public replace = true;
+        public scope = {
+            user: "="
+        }
     }
-           
-    export interface IGHViewerScope extends angular.IScope
-    {
-        message: string;
-        error: string;
-        username: string;
-        user: User;
-        search: (username: string) => void;
-        repoSortOrder: string;
-        repos: Repo[];
-    }    
 }
 
 module githubViewer {
@@ -43,11 +34,13 @@ module githubViewer {
             "$http"
         ];
         
-        constructor(protected $scope: Directives.IGHViewerScope, $http: angular.IHttpService) {
+        constructor(protected $scope: Models.IGHViewerScope, $http: angular.IHttpService) {
             this.$http = $http;
             $scope.username = "angular";
             $scope.message = "GitHub Viewer";
             $scope.repoSortOrder = "-stargazers_count";
+            $scope.user = new Models.User($scope.username, "", "");
+             
             $scope.search = (username: string) => this.search(username, this);
         }
         
@@ -62,7 +55,7 @@ module githubViewer {
         }
         
         onUserComplete(self: MainController, response: any) : angular.IPromise<any> {
-            // console.log("Inside onUserComplete");
+            //console.log("Inside onUserComplete");
             self.$scope.user = response.data;
                              
             self.$http.get(self.$scope.user.repos_url)
@@ -77,5 +70,8 @@ module githubViewer {
         }
     }
      
-    angular.module("githubViewer", []).controller("MainController", MainController);
+    angular.module("githubViewer", [])
+    .controller("MainController", MainController)
+    .directive("userDetails", () => new Directives.UserDetails())
+    .directive("repoDisplay", () => new Directives.RepoDisplay());
 }

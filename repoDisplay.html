@@ -1,0 +1,12 @@
+<div class="container-fluid">
+    <div class="row show-grid" >
+          <div class="col-md-3 text-uppercase"><strong>Name</strong></div>
+          <div class="col-md-1 text-uppercase"><strong>Stars</strong></div>
+          <div class="col-md-1 text-uppercase"><strong>Language</strong></div>
+    </div> 
+    <div class="row show-grid" ng-repeat="repo in repos | orderBy:repoSortOrder">
+          <div class="col-md-3">{{repo.name}}</div>
+          <div class="col-md-1">{{repo.stargazers_count | number}}</div>
+          <div class="col-md-1">{{repo.language}}</div>
+    </div>     
+</div>

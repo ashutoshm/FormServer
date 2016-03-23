@@ -1,21 +1,32 @@
 /// <reference path="angular-1.4.d.ts" />
+/// <reference path="models.ts" />
 var Directives;
 (function (Directives) {
-    var User = (function () {
-        function User(n, gid, url) {
-            this.name = n;
-            this.gravatar_id = gid;
-            this.repos_url = url;
+    var RepoDisplay = (function () {
+        function RepoDisplay() {
+            this.restrict = "E";
+            this.templateUrl = "repoDisplay.html";
+            this.replace = true;
+            this.scope = {
+                repos: "=",
+                repoSortOrder: "="
+            };
         }
-        return User;
+        return RepoDisplay;
     }());
-    Directives.User = User;
-    var Repo = (function () {
-        function Repo() {
+    Directives.RepoDisplay = RepoDisplay;
+    var UserDetails = (function () {
+        function UserDetails() {
+            this.restrict = "E";
+            this.templateUrl = "userdetails.html";
+            this.replace = true;
+            this.scope = {
+                user: "="
+            };
         }
-        return Repo;
+        return UserDetails;
     }());
-    Directives.Repo = Repo;
+    Directives.UserDetails = UserDetails;
 })(Directives || (Directives = {}));
 var githubViewer;
 (function (githubViewer) {
@@ -27,6 +38,7 @@ var githubViewer;
             $scope.username = "angular";
             $scope.message = "GitHub Viewer";
             $scope.repoSortOrder = "-stargazers_count";
+            $scope.user = new Models.User($scope.username, "", "");
             $scope.search = function (username) { return _this.search(username, _this); };
         }
         MainController.prototype.onError = function (self, reason) {
@@ -38,7 +50,7 @@ var githubViewer;
             return response.data;
         };
         MainController.prototype.onUserComplete = function (self, response) {
-            // console.log("Inside onUserComplete");
+            //console.log("Inside onUserComplete");
             self.$scope.user = response.data;
             self.$http.get(self.$scope.user.repos_url)
                 .then(function (response) { return self.onRepos(self, response); });
@@ -56,6 +68,9 @@ var githubViewer;
         return MainController;
     }());
     githubViewer.MainController = MainController;
-    angular.module("githubViewer", []).controller("MainController", MainController);
+    angular.module("githubViewer", [])
+        .controller("MainController", MainController)
+        .directive("userDetails", function () { return new Directives.UserDetails(); })
+        .directive("repoDisplay", function () { return new Directives.RepoDisplay(); });
 })(githubViewer || (githubViewer = {}));
 //# sourceMappingURL=app.js.map

@@ -2,22 +2,49 @@
 <html ng-app="githubViewer">
 
 <head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet" data-require="bootstrap-css@3.3.6" data-semver="3.3.6" />
     <script data-require="angular.js@*" data-semver="1.5" 
             src="https://code.angularjs.org/1.5.0/angular.js">
     </script>
+    <script src="models.js"></script>
     <script src="app.js"></script>
 </head>
 
 <body ng-controller="MainController">
-    <h1>{{message}}</h1>
-    <div>{{error}}</div>
-    
-    <form name="searchUser" ng-submit="search(username)">
-        <input type="search" required placeholder="Username to find" ng-model="username" />
-        <input type="submit" value="Search">
-    </form>
-    
-    <div ng-include="'userdetails.html'" ng-show="user"></div>
+    <div class="container">
+        <div class="row">
+        <h1>{{message}}</h1>
+        <div>{{error}}</div>
+        </div>
+        <div class="row">
+        <form name="searchUser" ng-submit="search(username)">
+            <div class="panel">
+                <div class="panelbody row">
+                    <div class="label-default col-md-3 ">User name:</div>
+                    <input class="col-md-3 input-md" type="search" required placeholder="Username to find" ng-model="username" />
+                    <input class="col-md-1 btn-sm" type="submit" value="Search">
+                </div>
+            </div>
+        </form>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <user-details user="user"></user-details>
+            </div>
+            <div class="col-md-1">
+                Order:
+                <select ng-model="repoSortOrder">
+                    <option value="+name">Name</option>
+                    <option value="-stargazers_count">Stars</option>
+                    <option value="+language">Language</option>
+                </select>                    
+            </div>
+        </div>
+        <div class="row">
+            <repo-display repos="repos" repoSortOrder="repoSortOrder"></repo-display>
+        </div>
+        
+    </div>
 </body>
 
 </html>
